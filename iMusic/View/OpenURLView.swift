@@ -7,40 +7,36 @@
 //
 
 import UIKit
+import WebKit
+
 var openURL: String?
+
 class OpenURLView: UIViewController, UIWebViewDelegate {
-    
-    
-    
-    func getOpenURL(url: String){
+    func getOpenURL(url: String) {
         openURL = url
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-//        print(openURL)
     }
-    
     
     func setup() {
         view.backgroundColor = .white
+        navigationItem.title = "iTunes"
         setupURL()
     }
     
     func setupURL() {
-//        print(openURL)
         
-        let myWebView:UIWebView = UIWebView(frame: CGRect(x:0, y:0, width: UIScreen.main.bounds.width, height:UIScreen.main.bounds.height))
-        self.view.addSubview(myWebView)
-        myWebView.delegate = self
-        
-//        guard let url = openURL else {return}
-        let url = "https://itunes.apple.com/ca/music-video/zombie-official-video/1357806798?uo=2"
+        guard let url = openURL else {return}
         guard let myURL = URL(string: url) else {return}
-        print("this is \(myURL)")
-        let myURLRequest: URLRequest = URLRequest(url: myURL)
-        myWebView.loadRequest(myURLRequest)
+        
+        let wkWebView = WKWebView(frame: self.view.frame, configuration: WKWebViewConfiguration())
+
+        wkWebView.customUserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.109 Safari/537.36"
+        wkWebView.load(URLRequest(url: myURL))
+        self.view.addSubview(wkWebView)
     }
     
 }
